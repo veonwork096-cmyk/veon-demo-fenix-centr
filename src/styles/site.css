@@ -1,0 +1,90 @@
+/* Shared styles of the «Фенікс центр» homepage: type, buttons, beams, FutureLink. Colours and fonts only through tokens.css. */
+html { font-synthesis: none; overflow-x: clip; scrollbar-color: var(--color-muted) var(--color-bg); }
+body { overflow-x: clip; }
+::selection { background: var(--color-accent); color: var(--color-text); }
+body {
+  font-size: var(--fs-body);
+  line-height: 1.55;
+  padding-top: var(--header-h);
+}
+@media (max-width: 767px) {
+  body { padding-bottom: 64px; }
+}
+h1, h2, h3 { font-family: var(--font-display); margin: 0; color: inherit; }
+h2 { font-size: var(--fs-h2); font-weight: 800; line-height: 1; letter-spacing: -0.02em; }
+h3 { font-size: var(--fs-h3); font-weight: 700; line-height: 1.15; letter-spacing: -0.01em; }
+p { margin: 0; }
+ul, ol { margin: 0; padding: 0; list-style: none; }
+.tnum { font-variant-numeric: tabular-nums; }
+.lead { font-size: var(--fs-lead); line-height: 1.45; }
+.small { font-size: var(--fs-small); line-height: 1.4; }
+.muted { color: var(--color-muted); }
+
+/* Section rhythm */
+.section { padding-block: var(--section-gap); }
+.section__head { display: grid; gap: var(--s-2); margin-bottom: var(--s-4); max-width: 46rem; }
+@media (min-width: 1024px) { .section__head { margin-bottom: var(--s-5); } }
+
+/* The beam: full-width orange load-bearing strip */
+.beam { display: block; height: var(--beam); background: var(--color-accent); }
+
+/* Text links */
+.link {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+  transition: color var(--dur-short) var(--ease-out), text-decoration-color var(--dur-short) var(--ease-out);
+}
+.link:hover { color: var(--color-accent-ink); text-decoration-thickness: 2px; }
+
+/* Link with a trailing arrow icon (the icon is SVG, the label is a verb phrase) */
+.go { display: inline-flex; align-items: center; gap: 0.5em; min-height: 44px; font-weight: 600; text-decoration: none; color: inherit; }
+.go span { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.2em; }
+.go svg { width: 1em; height: 1em; flex: none; transition: transform var(--dur-short) var(--ease-out); }
+.go:hover span { text-decoration-thickness: 2px; }
+.go:hover svg { transform: translateX(4px); }
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6em;
+  min-height: 48px;
+  padding: 0.75rem 1.4rem;
+  border: 2px solid var(--color-text);
+  border-radius: var(--radius-btn);
+  font: 600 1rem/1.2 var(--font-body);
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color var(--dur-short) var(--ease-out), color var(--dur-short) var(--ease-out), border-color var(--dur-short) var(--ease-out), transform var(--dur-micro) var(--ease-out);
+}
+.btn svg { width: 1.15em; height: 1.15em; flex: none; }
+.btn:active { transform: translateY(1px); }
+.btn--primary { background: var(--color-text); color: var(--color-on-dark); }
+.btn--primary:hover { background: var(--color-accent-ink); border-color: var(--color-accent-ink); }
+.btn--ghost { background: transparent; color: var(--color-text); }
+.btn--ghost:hover { background: var(--color-text); color: var(--color-on-dark); }
+.btn--lg { min-height: 56px; font-size: 1.0625rem; }
+.btn .tnum { font-weight: 700; }
+
+/* FutureLink: a page of the future site. Dashed underline, note on hover and focus. */
+.future-link { color: inherit; text-decoration: underline dashed 1px; text-underline-offset: 0.25em; text-decoration-color: var(--color-muted); }
+.future-link:hover { text-decoration-color: currentColor; }
+.future-link:focus .future-link__note { opacity: 1; transform: translate(-50%, 0); }
+.future-link__note { font-family: var(--font-body); font-weight: 500; text-decoration: none; }
+.future-link--inline { min-height: 44px; }
+/* Whole-cell FutureLink: the visible label stays, an invisible layer covers the cell */
+.future-link--cover { position: static; text-decoration: none; }
+.future-link--cover::after { content: ""; position: absolute; inset: 0; z-index: 1; }
+.future-link--cover .future-link__note { left: auto; right: var(--s-2); top: auto; bottom: var(--s-2); transform: translateY(4px); }
+.future-link--cover:hover .future-link__note,
+.future-link--cover:focus .future-link__note,
+.has-cover:hover .future-link__note { opacity: 1; transform: translateY(0); }
+.future-link--cover:focus-visible { outline: none; }
+.has-cover:has(.future-link--cover:focus-visible) { outline: 3px solid var(--color-focus); outline-offset: 2px; z-index: 2; }
+
+@media (prefers-reduced-motion: reduce) {
+  .btn:active, .go:hover svg { transform: none; }
+}

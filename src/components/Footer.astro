@@ -1,0 +1,55 @@
+---
+import Logo from "./Logo.astro";
+import FutureLink from "./FutureLink.astro";
+import { catalog, cities, instagram, facebookGroup, FUTURE_NOTE } from "../data/site";
+const pages = ["Оптовим клієнтам", "Центр комплектації KNAUF", "Центр CERESIT-PRO", "Виробники", "Доставка і оплата", "Товари зі знижкою", "Статті", "Про компанію", "Політика конфіденційності"];
+const year = new Date().getFullYear();
+const plain = (s: string) => s.replace(/­/g, "");
+---
+<footer class="ftr">
+  <span class="beam" aria-hidden="true"></span>
+  <div class="container ftr__grid">
+    <div class="ftr__brand">
+      <Logo />
+      <p class="small muted">Велика база будматеріалів у Львові. Опт і роздріб.</p>
+      <p class="small muted">Мережа: {cities.join(", ")}</p>
+    </div>
+    <nav class="ftr__col" aria-label="Розділи каталогу">
+      <h2 class="ftr__h">Каталог</h2>
+      <ul>{catalog.map((c) => <li><FutureLink note={FUTURE_NOTE} class="ftr__fl">{plain(c.name)}</FutureLink></li>)}</ul>
+    </nav>
+    <nav class="ftr__col" aria-label="Сторінки сайту">
+      <h2 class="ftr__h">Покупцям</h2>
+      <ul>{pages.map((p) => <li><FutureLink note={FUTURE_NOTE} class="ftr__fl">{p}</FutureLink></li>)}</ul>
+    </nav>
+    <div class="ftr__col">
+      <h2 class="ftr__h">Ми в мережах</h2>
+      <ul>
+        <li><a class="ftr__a" href={instagram} target="_blank" rel="noopener">Instagram</a></li>
+        <li><a class="ftr__a" href={facebookGroup} target="_blank" rel="noopener">Група у Facebook</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="container ftr__base small muted">
+    <p>© {year} Фенікс центр</p>
+  </div>
+</footer>
+
+<style>
+  .ftr { background: var(--color-bg); }
+  .ftr__grid { display: grid; gap: var(--s-4) var(--s-3); padding-block: var(--s-5) var(--s-4); grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .ftr__brand { grid-column: 1 / -1; display: grid; gap: var(--s-1); justify-items: start; }
+  .ftr__h { font-family: var(--font-body); font-size: var(--fs-body); font-weight: 700; letter-spacing: 0; margin-bottom: var(--s-1); }
+  .ftr__col ul { display: grid; }
+  .ftr__col li { font-size: 0.9375rem; line-height: 1.3; }
+  .ftr__col :global(.ftr__fl) { min-height: 40px; color: var(--color-muted); }
+  .ftr__col :global(.ftr__fl .future-link__note) { left: 0; transform: translate(0, -4px); }
+  .ftr__col :global(.ftr__fl:hover .future-link__note), .ftr__col :global(.ftr__fl:focus .future-link__note) { transform: translate(0, 0); }
+  .ftr__a { display: inline-flex; align-items: center; min-height: 44px; color: var(--color-text); font-weight: 600; text-underline-offset: 0.2em; white-space: nowrap; }
+  .ftr__a:hover { color: var(--color-accent-ink); }
+  .ftr__base { border-top: 1px solid var(--color-line-quiet); padding-block: var(--s-3); }
+  @media (min-width: 1024px) {
+    .ftr__grid { grid-template-columns: minmax(0, 4fr) minmax(0, 3fr) minmax(0, 3fr) minmax(0, 2fr); gap: var(--s-4); }
+    .ftr__brand { grid-column: auto; align-content: start; }
+  }
+</style>

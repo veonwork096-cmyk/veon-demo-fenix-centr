@@ -1,0 +1,53 @@
+---
+import Base from "../layouts/Base.astro";
+import Header from "../components/Header.astro";
+import Hero from "../components/Hero.astro";
+import Catalog from "../components/Catalog.astro";
+import HowToOrder from "../components/HowToOrder.astro";
+import Wholesale from "../components/Wholesale.astro";
+import Brands from "../components/Brands.astro";
+import Delivery from "../components/Delivery.astro";
+import About from "../components/About.astro";
+import Contacts from "../components/Contacts.astro";
+import Footer from "../components/Footer.astro";
+import BottomBar from "../components/BottomBar.astro";
+import { emails, instagram } from "../data/site";
+
+const H1 = "Велика база будматеріалів у Львові — опт і роздріб";
+const title = "Будматеріали у Львові оптом і в роздріб — Фенікс центр";
+const description = "База будматеріалів на Городоцькій, 367А: 12 розділів каталогу, центри KNAUF і CERESIT-PRO, доставка на об'єкт по Львову та області. Тел. 099 796 23 37";
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "HardwareStore",
+  name: "Фенікс центр",
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: "вул. Городоцька, 367А",
+    addressLocality: "Львів",
+    addressCountry: "UA",
+  },
+  telephone: ["+380997962337", "+380930642153"],
+  email: emails.sales,
+  openingHoursSpecification: [
+    { "@type": "OpeningHoursSpecification", dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"], opens: "09:00", closes: "18:00" },
+    { "@type": "OpeningHoursSpecification", dayOfWeek: "Saturday", opens: "09:00", closes: "14:00" },
+  ],
+  sameAs: [instagram],
+};
+---
+<Base lang="uk" title={title} description={description}>
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  <Header slot="header" />
+  <Hero h1={H1} />
+  <Catalog />
+  <HowToOrder />
+  <Wholesale />
+  <Brands />
+  <Delivery />
+  <About />
+  <Contacts />
+  <Footer slot="footer" />
+  <BottomBar slot="footer" />
+</Base>
+<script src="../scripts/status.ts"></script>

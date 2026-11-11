@@ -1,0 +1,111 @@
+---
+import Section from "./Section.astro";
+import Icon from "./Icon.astro";
+import { phones, address, mailOrder } from "../data/site";
+interface Props { h1: string; }
+const { h1 } = Astro.props;
+---
+<Section id="hero" rec="R-002,SEO-R008" class="hero">
+  <div class="container hero__top">
+    <a class="go hero__trade hero__trade--top" href="#wholesale" data-rec="R-003"><span>Оптовим клієнтам</span><Icon name="arrow" /></a>
+    <h1 class="hero__h1" set:html={h1.replace("у Львові —", '<span class="nw">у Львові —</span>')} />
+    <p class="lead hero__lead">Доставка на об'єкт по Львову та області або самовивіз зі складу на Городоцькій, 367А</p>
+  </div>
+
+  <span class="beam hero__beam" aria-hidden="true"></span>
+
+  <div class="hero__tier">
+    <ul class="container hero__cells">
+      <li class="hero__cell hero__cell--call" data-rec="R-001,SEO-R007">
+        <a class="btn btn--primary btn--lg hero__btn" href={phones.sales1.href}>
+          <Icon name="phone" />
+          <span>Подзвонити</span>
+          <span class="tnum">{phones.sales1.label}</span>
+        </a>
+      </li>
+      <li class="hero__cell">
+        <a class="btn btn--ghost hero__btn hero__btn--cat" href="#catalog" data-rec="R-006">
+          <Icon name="grid" />
+          <span>Каталог</span>
+        </a>
+      </li>
+      <li class="hero__cell hero__cell--hours">
+        <p class="hero__status" data-status hidden></p>
+        <p class="hero__sched">Пн–пт 9:00–18:00<br />Сб 9:00–14:00</p>
+        <p class="small hero__closed" data-closed-note hidden>
+          <a class="link" href={mailOrder}>Надішліть список на e-mail</a> — менеджер відповість у робочий час
+        </p>
+      </li>
+      <li class="hero__cell hero__cell--addr">
+        <p class="hero__addr">{address.short}</p>
+        <p class="hero__phone2">Також: <a class="link tnum" href={phones.sales2.href}>{phones.sales2.label}</a></p>
+      </li>
+      <li class="hero__cell hero__cell--trade">
+        <a class="go hero__trade" href="#wholesale" data-rec="R-003"><span>Оптовим клієнтам</span><Icon name="arrow" /></a>
+      </li>
+    </ul>
+  </div>
+</Section>
+
+<style>
+  .hero__top { display: grid; gap: var(--s-3); padding-block: var(--s-4) var(--s-4); }
+  .hero__h1 {
+    font-size: var(--fs-h1); font-weight: 800; line-height: 1; letter-spacing: -0.03em;
+    max-width: 13.5em; text-wrap: balance;
+  }
+  .hero__h1 :global(.nw) { white-space: nowrap; }
+  .hero__lead { max-width: 34rem; color: var(--color-text); }
+  .hero__trade--top { display: none; }
+
+  .hero__beam { transform-origin: left center; }
+  :global(.js) .hero__beam { animation: beam-in var(--dur-beam) var(--ease-out) both; }
+  @keyframes beam-in { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+  .hero__tier { background: var(--color-surface); border-bottom: 1px solid var(--color-line); }
+  .hero__cells { display: grid; grid-template-columns: minmax(0, 1fr); padding-block: var(--s-3); gap: var(--s-2); }
+  .hero__btn { width: 100%; flex-wrap: wrap; column-gap: 0.6em; row-gap: 0; }
+  .hero__btn .tnum { white-space: nowrap; }
+  .hero__btn--cat { min-height: 48px; }
+  .hero__cell--call .hero__btn { justify-content: center; }
+  .hero__cell--hours, .hero__cell--addr { display: grid; gap: 0.25rem; }
+  .hero__status { font-weight: 600; }
+  .hero__sched { color: var(--color-muted); }
+  .hero__closed { color: var(--color-muted); }
+  .hero__addr { font-weight: 600; }
+  .hero__phone2 { color: var(--color-muted); }
+  .hero__phone2 a { color: var(--color-text); font-weight: 600; white-space: nowrap; }
+  .hero__cell--hours { padding-top: var(--s-1); border-top: 1px solid var(--color-line-quiet); }
+  .hero__cell--addr { padding-top: var(--s-2); border-top: 1px solid var(--color-line-quiet); }
+  .hero__cell--trade { border-top: 1px solid var(--color-line-quiet); }
+
+  @media (min-width: 768px) {
+    .hero__top { padding-block: var(--s-5) var(--s-4); }
+    .hero__cells { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .hero__cell--hours, .hero__cell--addr { border-top: 0; padding-top: 0; }
+    .hero__cell--trade { display: none; }
+    .hero__trade--top { display: inline-flex; justify-self: end; }
+    .hero__h1 { max-width: none; }
+  }
+
+  @media (min-width: 1024px) {
+    .hero__top { grid-template-columns: minmax(0, 1fr) auto; column-gap: var(--s-4); padding-block: var(--s-5) var(--s-4); }
+    .hero__h1 { grid-column: 1 / -1; grid-row: 2; max-width: 12em; text-wrap: wrap; }
+    .hero__trade--top { grid-column: 2; grid-row: 1; }
+    .hero__lead { grid-column: 1; grid-row: 3; }
+    .hero__cells {
+      grid-template-columns: minmax(0, 1.45fr) minmax(0, 0.8fr) minmax(0, 1fr) minmax(0, 1fr);
+      gap: 0; padding-block: 0;
+      border-left: var(--post) solid var(--color-line);
+    }
+    .hero__cell { padding: var(--s-3); border-right: var(--post) solid var(--color-line); display: flex; flex-direction: column; justify-content: center; min-height: 8.5rem; }
+    .hero__cell--hours, .hero__cell--addr { padding: var(--s-3); }
+    .hero__cell--trade { display: none; }
+  }
+  @media (min-width: 1024px) and (max-width: 1399px) {
+    .hero__cell, .hero__cell--hours, .hero__cell--addr { padding: var(--s-2); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :global(.js) .hero__beam { animation: none; }
+  }
+</style>

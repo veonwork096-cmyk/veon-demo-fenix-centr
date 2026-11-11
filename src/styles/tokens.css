@@ -1,0 +1,73 @@
+/* Hallmark · shape: rack of tiers · genre: editorial · theme: custom · job: buy+visit · idea: "Сторінка — це стелаж бази: оранжеві балки тримають кожен ярус асортименту, а номер відділу продажів завжди на рівні руки" · vibe: "light warehouse, steel beams, plain facts"
+ * paper: #F2F2EE · surface: absolute · accent: #EE6A1F · display: Geologica · body: Golos Text · hero: full-width H1 resting on an orange beam, a tier of actions below (call with number, catalogue, today's hours, warehouse address) · nav: white fixed bar, logo, 7 anchors, city, phone and call button; 390 logo, call icon, menu · footer: light, on a beam, catalogue sections, info pages, cities, socials · imagery: none · signature: orange beams under every tier and the 12-cell catalogue rack
+ * axes: warm-grey/grotesk-800/orange-beam · posture: committed · contrast: pass · fold: pass · v2.0.0 */
+/* Hallmark · pre-emit critique: P4 H4 E4 S5 R4 V4 · weakest: E, no client photos, so the page is carried by type, beams and the rack grid */
+/* Hallmark · waive 7b · --color-surface #FFFFFF in concept.md 8.2 and veon-concept colors · the approved concept makes rack tiers pure white against the warm #F2F2EE warehouse floor, the tint comes from the floor; concept outranks Hallmark (hallmark.md priority 2) */
+/* Hallmark · dismissed 41 · accent-ink #A33A0C is never set on the accent #EE6A1F: on orange fields text is --color-text (5.79:1); accent-ink is used only on bg and surface (5.91 and 6.63:1) */
+/* Hallmark · waive 39b · .btn--lg 56px in Hero, Wholesale · concept.md 8.5 and 8.12 set the primary call button at 56px so the call target is the largest thing under a thumb on a building site */
+/* Hallmark · waive 71 · h3.rack__name is the first line inside a rack cell · the space above it is the cell's own padding under a post and beam, not a gap between blocks; the head belongs to its cell */
+/* Hallmark · answered F19 · concept.md 8.3 fixes Geologica 700/800 for heads and phones and Golos Text 400/500/600 for text, the weights are the approved type system */
+/* Client design tokens: from design/concept.md (veon-concept: colors #F2F2EE #FFFFFF #161616 #595954 #EE6A1F #A33A0C; fonts Geologica, Golos Text). */
+:root {
+  /* colour roles, concept 8.2 */
+  --color-bg: #F2F2EE;
+  --color-surface: #FFFFFF;
+  --color-text: #161616;
+  --color-muted: #595954;
+  --color-accent: #EE6A1F;
+  --color-accent-ink: #A33A0C;
+  --color-line: #161616;
+  --color-line-quiet: #CFCFC8;
+  --color-inverse-bg: var(--color-text);
+  --color-inverse-text: var(--color-bg);
+  --color-on-dark: var(--color-bg);
+  --color-focus: var(--color-text);
+
+  /* type, concept 8.3 (390 to 1440 fluid) */
+  --font-display: "Geologica Variable", "Geologica", "Geologica Fallback", system-ui, sans-serif;
+  --font-body: "Golos Text Variable", "Golos Text", "Golos Fallback", system-ui, sans-serif;
+  --fs-h1: clamp(2.75rem, 1.357rem + 5.714vw, 6.5rem);
+  --fs-h2: clamp(2.125rem, 1.614rem + 2.095vw, 3.5rem);
+  --fs-h3: clamp(1.375rem, 1.236rem + 0.571vw, 1.75rem);
+  --fs-cell: clamp(1rem, 0.85rem + 0.62vw, 1.5rem);
+  --fs-lead: clamp(1.125rem, 1.032rem + 0.381vw, 1.375rem);
+  --fs-body: clamp(1rem, 0.954rem + 0.19vw, 1.125rem);
+  --fs-small: 0.875rem;
+  --fs-phone: clamp(2rem, 1.6rem + 1.905vw, 3.5rem);
+  --fs-big: clamp(7.5rem, 5.643rem + 7.619vw, 12.5rem);
+  --fs-route: clamp(1.75rem, 1.2rem + 2.2vw, 3.25rem);
+
+  /* rhythm 8, concept 8.4 */
+  --s-1: 0.5rem;
+  --s-2: 1rem;
+  --s-3: 1.5rem;
+  --s-4: 2.5rem;
+  --s-5: 4rem;
+  --s-6: 6.5rem;
+  --s-7: 10rem;
+  --section-gap: clamp(4rem, 2.1rem + 7.6vw, 9rem);
+
+  --beam: clamp(10px, 7.8px + 0.57vw, 16px);
+  --beam-tier: clamp(8px, 6.5px + 0.38vw, 12px);
+  --post: 1px;
+  --radius: 0;
+  --radius-btn: 2px;
+  --header-h: 56px;
+
+  --ease-out: cubic-bezier(.2, .7, .2, 1);
+  --ease-in: cubic-bezier(.5, 0, .75, 0);
+  --dur-micro: 120ms;
+  --dur-short: 200ms;
+  --dur: 450ms;
+  --dur-beam: 500ms;
+
+  --space: clamp(1.25rem, -0.143rem + 5.714vw, 5rem);
+  --container: 1280px;
+}
+@media (min-width: 1200px) {
+  :root { --header-h: 72px; --dur-beam: 700ms; }
+}
+
+/* metric fallbacks while the woff2 files load */
+@font-face { font-family: "Geologica Fallback"; src: local("Arial"); size-adjust: 104%; ascent-override: 92%; descent-override: 24%; }
+@font-face { font-family: "Golos Fallback"; src: local("Arial"); size-adjust: 99%; ascent-override: 92%; descent-override: 24%; }

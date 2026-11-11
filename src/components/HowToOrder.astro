@@ -1,0 +1,71 @@
+---
+import Section from "./Section.astro";
+import Icon from "./Icon.astro";
+import { phones, mailOrder, emails } from "../data/site";
+const route = ["Список", "дзвінок або e‑mail", "прорахунок", "доставка або самовивіз"];
+---
+<Section id="how-to-order" rec="R-004" class="order section">
+  <div class="container order__grid">
+    <div class="order__main">
+      <h2>Як замовити</h2>
+      <ol class="order__route" aria-label="Маршрут замовлення">
+        {route.map((step) => <li>{step}</li>)}
+      </ol>
+      <p class="lead order__text">
+        Замовлення оформлює менеджер: складіть список або оберіть розділ каталогу, подзвоніть чи надішліть список на e-mail. Консультанти прорахують обсяг і погодять доставку на об'єкт або самовивіз зі складу.
+      </p>
+    </div>
+
+    <aside class="sheet" aria-labelledby="sheet-title">
+      <h3 id="sheet-title" class="sheet__title">Що написати в листі</h3>
+      <ol class="sheet__rows">
+        <li><span class="sheet__n" aria-hidden="true">1</span><span>Матеріали й кількість</span></li>
+        <li><span class="sheet__n" aria-hidden="true">2</span><span>Адреса об'єкта або самовивіз</span></li>
+        <li><span class="sheet__n" aria-hidden="true">3</span><span>Телефон для зв'язку</span></li>
+      </ol>
+      <div class="sheet__act">
+        <a class="btn btn--primary" href={mailOrder}><Icon name="mail" /><span>Надіслати список</span></a>
+        <a class="btn btn--ghost" href={phones.sales1.href}><Icon name="phone" /><span class="tnum">{phones.sales1.label}</span></a>
+      </div>
+      <p class="small muted sheet__mail">Лист піде на {emails.sales} з темою «Прорахунок матеріалів»</p>
+    </aside>
+  </div>
+</Section>
+
+<style>
+  .order__grid { display: grid; gap: var(--s-5); }
+  .order__main { display: grid; gap: var(--s-4); align-content: start; }
+
+  .order__route {
+    font-family: var(--font-display); font-weight: 800; font-size: var(--fs-route); line-height: 1.12; letter-spacing: -0.02em;
+    display: grid; gap: 0.15em;
+  }
+  .order__route li { display: flex; align-items: baseline; gap: 0.35em; }
+  .order__route li + li::before { content: "→"; content: "→" / ""; color: var(--color-accent-ink); font-weight: 600; }
+  .order__route li:first-child { color: var(--color-text); }
+  .order__text { max-width: 40rem; color: var(--color-muted); }
+
+  .sheet {
+    position: relative; align-self: start;
+    background: var(--color-surface);
+    border: var(--post) solid var(--color-line);
+    border-bottom: var(--beam-tier) solid var(--color-accent);
+    padding: var(--s-3);
+    display: grid; gap: var(--s-3);
+  }
+  .sheet__title { font-size: var(--fs-h3); }
+  .sheet__rows { display: grid; }
+  .sheet__rows li { display: flex; gap: var(--s-2); align-items: baseline; padding-block: var(--s-2); border-top: 1px solid var(--color-line-quiet); font-weight: 500; font-size: var(--fs-lead); }
+  .sheet__n { font-family: var(--font-display); font-weight: 800; color: var(--color-accent-ink); min-width: 1ch; }
+  .sheet__act { display: flex; flex-wrap: wrap; gap: var(--s-1); }
+  .sheet__act .btn { flex: 1 1 auto; white-space: nowrap; }
+  .sheet__mail { overflow-wrap: anywhere; }
+
+  @media (min-width: 1024px) {
+    .order__grid { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: var(--s-6); align-items: start; }
+    .order__route { display: block; }
+    .order__route li { display: inline; }
+    .order__route li + li::before { content: " → "; content: " → " / ""; }
+    .sheet { padding: var(--s-4); margin-top: var(--s-2); }
+  }
+</style>

@@ -1,0 +1,117 @@
+---
+import Section from "./Section.astro";
+import Icon from "./Icon.astro";
+import FutureLink from "./FutureLink.astro";
+import { catalog, phones, FUTURE_NOTE } from "../data/site";
+---
+<Section id="catalog" rec="R-006" class="catalog section">
+  <div class="container">
+    <div class="section__head catalog__head">
+      <h2>Каталог будматеріалів</h2>
+      <p class="lead muted">Від цементу й цегли до інструментів: розділи складу на Городоцькій</p>
+    </div>
+  </div>
+
+  <div class="rack">
+    <ul class="container rack__grid">
+      {catalog.map((c, i) => (
+        <li class="rack__cell has-cover" data-reveal style={`--col4:${i % 4};--col2:${i % 2}`}>
+          <div class="rack__load">
+            <h3 class="rack__name" set:html={c.name} />
+            {c.sub && <p class="small rack__sub">{c.sub}</p>}
+            <FutureLink note={FUTURE_NOTE} class="future-link--cover rack__go">
+              <span class="rack__go-text">Відкрити розділ</span>
+              <Icon name="arrow" class="rack__arrow" />
+            </FutureLink>
+          </div>
+        </li>
+      ))}
+    </ul>
+  </div>
+
+  <div class="container catalog__help" data-rec="R-001">
+    <p class="lead">Не знайшли потрібне? Подзвоніть — підкажемо і прорахуємо обсяг</p>
+    <a class="btn btn--primary" href={phones.sales1.href}>
+      <Icon name="phone" />
+      <span class="tnum">{phones.sales1.label}</span>
+    </a>
+  </div>
+</Section>
+
+<style>
+  :global(.catalog) { padding-bottom: var(--s-5); }
+  .catalog__head { margin-bottom: var(--s-4); }
+
+  /* The rack: posts are 1px ink lines, every tier stands on an orange beam */
+  .rack__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    border-left: var(--post) solid var(--color-line);
+    border-top: var(--post) solid var(--color-line);
+  }
+  .rack__cell {
+    position: relative;
+    background: var(--color-surface);
+    border-right: var(--post) solid var(--color-line);
+    min-height: 9.5rem;
+    display: flex;
+  }
+  /* beam segment under each cell; segments meet into one continuous beam per tier */
+  .rack__cell::after {
+    content: ""; position: absolute; left: calc(-1 * var(--post)); right: calc(-1 * var(--post)); bottom: calc(-1 * var(--beam-tier)); height: var(--beam-tier);
+    background: var(--color-accent);
+    transition: background-color var(--dur-short) var(--ease-out);
+    z-index: 0;
+  }
+  .rack__cell { margin-bottom: var(--beam-tier); }
+  .rack__load {
+    display: flex; flex-direction: column; gap: var(--s-1);
+    width: 100%;
+    padding: var(--s-2) 0.75rem var(--s-2);
+    transition: transform var(--dur-short) var(--ease-out);
+  }
+  .rack__name { font-size: var(--fs-cell); line-height: 1.12; hyphens: manual; overflow-wrap: break-word; }
+  .rack__sub { color: var(--color-muted); }
+  :global(.rack__go) { margin-top: auto; padding-top: var(--s-1); display: inline-flex; align-items: center; gap: 0.4rem; color: var(--color-muted); font-size: var(--fs-small); font-weight: 500; }
+  :global(.rack__go) :global(.rack__arrow) { width: 1rem; height: 1rem; transition: transform var(--dur-short) var(--ease-out); }
+
+  .rack__cell:hover::after, .rack__cell:has(:focus-visible)::after { background: var(--color-accent-ink); }
+  .rack__cell:hover :global(.rack__go), .rack__cell:has(:focus-visible) :global(.rack__go) { color: var(--color-text); }
+  .rack__cell:hover :global(.rack__arrow) { transform: translateX(4px); }
+  .rack__cell:active .rack__load { transform: translateY(-2px); }
+
+  @media (hover: hover) and (min-width: 768px) {
+    .rack__cell:hover .rack__load, .rack__cell:has(:focus-visible) .rack__load { transform: translateY(-4px); }
+  }
+
+  /* Tiers load once, one cell after another (60 ms) on wide screens, a whole tier at once on phones */
+  .rack__cell[data-reveal] { transition: opacity var(--dur) var(--ease-out), transform var(--dur) var(--ease-out); }
+  :global(.js) .rack__cell[data-reveal]:not(:global(.is-visible)) { transform: translateY(12px); }
+
+  @media (max-width: 767px) {
+    .rack__cell { min-height: 7rem; }
+    .rack__sub { display: none; }
+    .rack__go-text { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  }
+  @media (min-width: 768px) {
+    .rack__grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .rack__cell { min-height: 11.5rem; }
+    .rack__load { padding: var(--s-3) var(--s-3) var(--s-2); }
+    .rack__cell[data-reveal] { transition-delay: calc(var(--col4) * 60ms); }
+  }
+  @media (min-width: 1024px) {
+    .rack__cell { min-height: 12.5rem; }
+  }
+
+  .catalog__help {
+    display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--s-2) var(--s-3);
+    padding-top: var(--s-4);
+  }
+  .catalog__help p { max-width: 36rem; font-weight: 500; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .rack__load, .rack__cell:hover .rack__load, .rack__cell:active .rack__load { transform: none !important; }
+    .rack__cell:hover :global(.rack__arrow) { transform: none; }
+    :global(.js) .rack__cell[data-reveal]:not(:global(.is-visible)) { transform: none; opacity: 1; }
+  }
+</style>

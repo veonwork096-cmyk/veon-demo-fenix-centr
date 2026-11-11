@@ -1,0 +1,41 @@
+---
+import Icon from "./Icon.astro";
+import { phones } from "../data/site";
+---
+<div class="bar" data-bar data-rec="R-001,R-013,M-R004">
+  <a class="bar__call" href={phones.sales1.href}><Icon name="phone" /><span>Подзвонити</span></a>
+  <a class="bar__cat" href="#catalog"><Icon name="grid" /><span>Каталог</span></a>
+</div>
+
+<script>
+  // Phones: the call bar slides in once the hero has left the screen (concept 8.8). Without JS it simply stays visible.
+  const bar = document.querySelector<HTMLElement>("[data-bar]");
+  const hero = document.getElementById("hero");
+  if (bar && hero && "IntersectionObserver" in window) {
+    const set = (show: boolean) => { bar.classList.toggle("is-shown", show); bar.inert = !show; };
+    bar.classList.add("is-armed");
+    set(false);
+    new IntersectionObserver(([e]) => set(!e.isIntersecting), { threshold: 0 }).observe(hero);
+  }
+</script>
+
+<style>
+  .bar {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 40;
+    display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); height: 64px;
+    background: var(--color-inverse-bg); border-top: 4px solid var(--color-accent);
+    transition: transform 250ms var(--ease-out), opacity 250ms var(--ease-out);
+  }
+  .bar.is-armed:not(.is-shown) { transform: translateY(100%); opacity: 0; }
+  .bar a { display: flex; align-items: center; justify-content: center; gap: 0.5rem; font-weight: 600; font-size: 1.0625rem; text-decoration: none; transition: opacity var(--dur-micro) var(--ease-out); }
+  .bar a :global(svg) { width: 20px; height: 20px; }
+  .bar__call { background: var(--color-accent); color: var(--color-text); }
+  .bar__cat { color: var(--color-inverse-text); }
+  .bar a:focus-visible { outline: 3px solid var(--color-accent); outline-offset: -5px; }
+  .bar__call:focus-visible { outline-color: var(--color-text); }
+  .bar a:hover, .bar a:active { opacity: 0.85; }
+  @media (min-width: 768px) { .bar { display: none; } }
+  @media (prefers-reduced-motion: reduce) {
+    .bar.is-armed:not(.is-shown) { transform: none; }
+  }
+</style>

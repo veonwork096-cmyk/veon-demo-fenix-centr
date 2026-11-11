@@ -1,0 +1,68 @@
+---
+import Section from "./Section.astro";
+import Icon from "./Icon.astro";
+import FutureLink from "./FutureLink.astro";
+import { brands, FUTURE_NOTE } from "../data/site";
+const centres = [
+  { name: "Центр комплектації KNAUF", text: "Окремий розділ бази: матеріали KNAUF без посередників." },
+  { name: "Центр CERESIT-PRO", text: "Окремий розділ бази з матеріалами CERESIT." },
+];
+---
+<Section id="brands" rec="R-007,R-009,SEO-R009" class="brands section">
+  <div class="container">
+    <div class="section__head">
+      <h2>Центри KNAUF і CERESIT-PRO</h2>
+    </div>
+    <ul class="centres">
+      {centres.map((c) => (
+        <li class="centre has-cover">
+          <div class="centre__load">
+            <h3 class="centre__name">{c.name}</h3>
+            <p class="centre__text">{c.text}</p>
+            <FutureLink note={FUTURE_NOTE} class="future-link--cover centre__go">
+              <span>Перейти до центру</span>
+              <Icon name="arrow" class="centre__arrow" />
+            </FutureLink>
+          </div>
+        </li>
+      ))}
+    </ul>
+
+    <div class="makers">
+      <h3 class="makers__title">Виробники в асортименті</h3>
+      <ul class="makers__list">{brands.map((b) => <li>{b}</li>)}</ul>
+      <FutureLink note={FUTURE_NOTE} class="future-link--inline makers__more">Усі виробники</FutureLink>
+    </div>
+  </div>
+</Section>
+
+<style>
+  .centres { display: grid; border-left: var(--post) solid var(--color-line); border-top: var(--post) solid var(--color-line); }
+  .centre { position: relative; background: var(--color-surface); border-right: var(--post) solid var(--color-line); margin-bottom: var(--beam-tier); }
+  .centre::after { content: ""; position: absolute; left: calc(-1 * var(--post)); right: calc(-1 * var(--post)); bottom: calc(-1 * var(--beam-tier)); height: var(--beam-tier); background: var(--color-accent); transition: background-color var(--dur-short) var(--ease-out); }
+  .centre__load { display: grid; gap: var(--s-2); padding: var(--s-3) var(--s-3) var(--s-3); min-height: 15rem; align-content: start; transition: transform var(--dur-short) var(--ease-out); }
+  .centre__name { font-size: var(--fs-h2); font-weight: 800; line-height: 1; letter-spacing: -0.02em; }
+  .centre__text { color: var(--color-muted); max-width: 30rem; }
+  :global(.centre__go) { align-self: end; display: inline-flex; align-items: center; gap: 0.4rem; font-weight: 600; color: var(--color-text); }
+  :global(.centre__go) :global(.centre__arrow) { width: 1.1rem; height: 1.1rem; transition: transform var(--dur-short) var(--ease-out); }
+  .centre:hover::after, .centre:has(:focus-visible)::after { background: var(--color-accent-ink); }
+  .centre:hover :global(.centre__arrow) { transform: translateX(4px); }
+  .centre:active .centre__load { transform: translateY(-2px); }
+  @media (hover: hover) and (min-width: 768px) {
+    .centre:hover .centre__load, .centre:has(:focus-visible) .centre__load { transform: translateY(-4px); }
+  }
+
+  .makers { margin-top: var(--s-5); display: grid; gap: var(--s-2); }
+  .makers__title { font-family: var(--font-body); font-size: var(--fs-body); font-weight: 600; color: var(--color-muted); }
+  .makers__list { display: flex; flex-wrap: wrap; gap: var(--s-1) var(--s-4); font-family: var(--font-display); font-weight: 700; font-size: var(--fs-h3); letter-spacing: -0.01em; }
+  :global(.makers__more) { font-weight: 600; justify-self: start; }
+
+  @media (min-width: 768px) {
+    .centres { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .centre__load { padding: var(--s-4); min-height: 20rem; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .centre__load, .centre:hover .centre__load, .centre:active .centre__load { transform: none !important; }
+    .centre:hover :global(.centre__arrow) { transform: none; }
+  }
+</style>

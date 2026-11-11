@@ -1,0 +1,172 @@
+---
+import Logo from "./Logo.astro";
+import Icon from "./Icon.astro";
+import FutureLink from "./FutureLink.astro";
+import { nav, phones, cities, FUTURE_NOTE } from "../data/site";
+const others = cities.filter((c) => c !== "Львів");
+---
+<header class="hdr" data-hdr data-rec="R-001,R-008,R-013">
+  <div class="container hdr__in">
+    <Logo />
+
+    <details class="city">
+      <summary class="city__btn">
+        <span>Львів</span>
+        <svg viewBox="0 0 12 12" aria-hidden="true" focusable="false"><path d="M2 4l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6" /></svg>
+      </summary>
+      <div class="city__panel">
+        <p class="small muted">Мережа «Фенікс центр» також працює в містах:</p>
+        <ul>{others.map((c) => <li>{c}</li>)}</ul>
+      </div>
+    </details>
+
+    <nav class="hdr__nav" aria-label="Головне меню">
+      <ul>
+        {nav.map((item) => (
+          <li>
+            {item.href
+              ? <a href={item.href}>{item.label}</a>
+              : <FutureLink note={FUTURE_NOTE} class="future-link--nav">{item.label}</FutureLink>}
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    <div class="hdr__act">
+      <a class="btn btn--primary hdr__call" href={phones.sales1.href} aria-label={`Подзвонити: ${phones.sales1.label}`}>
+        <Icon name="phone" />
+        <span class="hdr__call-text">Подзвонити</span>
+        <span class="hdr__call-num tnum">{phones.sales1.label}</span>
+      </a>
+      <details class="menu" data-menu>
+        <summary class="menu__btn">
+          <Icon name="menu" class="menu__open" />
+          <Icon name="close" class="menu__close" />
+          <span>Меню</span>
+        </summary>
+        <div class="menu__panel">
+          <nav aria-label="Меню розділів">
+            <ul class="menu__list">
+              {nav.map((item) => (
+                <li>
+                  {item.href
+                    ? <a href={item.href}>{item.label}</a>
+                    : <FutureLink note={FUTURE_NOTE} class="future-link--menu">{item.label}</FutureLink>}
+                </li>
+              ))}
+            </ul>
+          </nav>
+          <div class="menu__contacts">
+            <a class="menu__phone tnum" href={phones.sales1.href}>{phones.sales1.label}</a>
+            <a class="menu__phone tnum" href={phones.sales2.href}>{phones.sales2.label}</a>
+            <p class="small muted">Пн–пт 9:00–18:00, сб 9:00–14:00</p>
+            <p class="small muted">Мережа «Фенікс центр»: {cities.join(", ")}</p>
+          </div>
+        </div>
+      </details>
+    </div>
+  </div>
+</header>
+
+<script>
+  const hdr = document.querySelector<HTMLElement>("[data-hdr]");
+  const menu = document.querySelector<HTMLDetailsElement>("[data-menu]");
+  if (hdr) {
+    let ticking = false;
+    const update = () => { hdr.classList.toggle("is-scrolled", window.scrollY > 8); ticking = false; };
+    window.addEventListener("scroll", () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } }, { passive: true });
+    update();
+  }
+  if (menu) {
+    menu.querySelectorAll("a[href^='#']").forEach((a) => a.addEventListener("click", () => { menu.open = false; }));
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && menu.open) { menu.open = false; menu.querySelector("summary")?.focus(); }
+    });
+  }
+  document.querySelectorAll<HTMLDetailsElement>("details.city").forEach((d) => {
+    document.addEventListener("click", (e) => { if (d.open && !d.contains(e.target as Node)) d.open = false; });
+  });
+</script>
+
+<style>
+  .hdr { position: fixed; inset: 0 0 auto 0; z-index: 50; background: var(--color-surface); border-bottom: 1px solid var(--color-line-quiet); }
+  .hdr.is-scrolled { border-bottom-color: var(--color-line); }
+  .hdr__in { display: flex; align-items: center; gap: var(--s-2); height: var(--header-h); }
+  @media (min-width: 1200px) { .hdr.is-scrolled .hdr__in { height: 60px; } }
+
+  .city, .hdr__nav, .hdr__call-text, .hdr__call-num { display: none; }
+
+  .hdr__act { margin-left: auto; display: flex; align-items: center; gap: var(--s-1); }
+  .hdr__call { width: 44px; min-height: 44px; padding: 0; }
+  .hdr__call :global(svg) { width: 20px; height: 20px; }
+
+  summary { list-style: none; cursor: pointer; }
+  summary::-webkit-details-marker { display: none; }
+
+  .menu__btn { display: inline-flex; align-items: center; gap: 0.4rem; min-height: 44px; padding: 0 0.75rem; border: 2px solid var(--color-text); border-radius: var(--radius-btn); font-weight: 600; transition: background-color var(--dur-short) var(--ease-out), color var(--dur-short) var(--ease-out); }
+  .menu__btn:hover { background: var(--color-text); color: var(--color-on-dark); }
+  .menu__btn :global(svg) { width: 18px; height: 18px; }
+  .menu :global(.menu__close) { display: none; }
+  .menu[open] :global(.menu__close) { display: block; }
+  .menu[open] :global(.menu__open) { display: none; }
+  .menu__panel {
+    position: fixed; inset: var(--header-h) 0 auto 0; max-height: calc(100dvh - var(--header-h)); overflow-y: auto;
+    background: var(--color-surface); border-top: var(--beam) solid var(--color-accent); border-bottom: 1px solid var(--color-line);
+    padding: var(--s-2) var(--space) var(--s-4);
+  }
+  .menu__list li { border-bottom: 1px solid var(--color-line-quiet); }
+  .menu__list a, .menu__list :global(.future-link) { display: flex; align-items: center; min-height: 52px; font-family: var(--font-display); font-weight: 700; font-size: 1.375rem; letter-spacing: -0.01em; text-decoration: none; color: var(--color-text); white-space: nowrap; }
+  .menu__list a:hover { color: var(--color-accent-ink); }
+  .menu__list :global(.future-link) { color: var(--color-muted); }
+  .menu__list :global(.future-link__note) { left: auto; right: 0; top: 50%; transform: translateY(-50%); }
+  .menu__contacts { display: grid; gap: var(--s-1); padding-top: var(--s-3); }
+  .menu__phone { font-family: var(--font-display); font-weight: 700; font-size: 1.5rem; text-decoration: none; color: var(--color-text); min-height: 44px; display: inline-flex; align-items: center; white-space: nowrap; }
+
+  @media (max-width: 359px) {
+    .hdr__in { gap: 0.5rem; }
+    .hdr__in :global(.logo__mark) { width: 28px; height: 28px; }
+    .hdr__in :global(.logo__word) { font-size: 1.05rem; }
+    .menu__btn { padding: 0 0.6rem; }
+    .menu__btn :global(.menu__open) { display: none; }
+  }
+  @media (min-width: 480px) {
+    .hdr__call { width: auto; padding: 0 1rem; }
+    .hdr__call-text { display: inline; }
+  }
+
+  @media (min-width: 1200px) {
+    .city { display: none; }
+    .hdr__call { white-space: nowrap; }
+    .hdr__call-text { display: none; }
+    .hdr__call-num { display: inline; font-family: var(--font-display); font-weight: 700; font-size: 1.0625rem; }
+    .hdr__nav { display: block; margin-left: var(--s-1); }
+    .menu { display: none; }
+    .hdr__in { gap: var(--s-2); }
+    .hdr__act { gap: var(--s-2); }
+
+    .city { position: relative; }
+    .city__btn { display: inline-flex; align-items: center; gap: 0.3rem; min-height: 44px; font-weight: 600; font-size: 0.9375rem; }
+    .city__btn svg { width: 12px; height: 12px; transition: transform var(--dur-short) var(--ease-out); }
+    .city[open] .city__btn svg { transform: rotate(180deg); }
+    .city__btn:hover span { text-decoration: underline; text-underline-offset: 0.2em; }
+    .city__panel { position: absolute; top: calc(100% + 8px); left: 0; width: 15rem; padding: var(--s-2); background: var(--color-surface); border: 1px solid var(--color-line); border-bottom: var(--beam-tier) solid var(--color-accent); display: grid; gap: var(--s-1); }
+    .city__panel ul { display: grid; gap: 0.25rem; font-weight: 600; }
+
+    .hdr__nav ul { display: flex; align-items: center; gap: clamp(0.75rem, -1.2rem + 2.2vw, 1.25rem); }
+    .hdr__nav a, .hdr__nav :global(.future-link) { position: relative; display: inline-flex; align-items: center; min-height: 44px; font-size: 0.9375rem; font-weight: 500; white-space: nowrap; text-decoration: none; color: var(--color-text); }
+    .hdr__nav a::after { content: ""; position: absolute; left: 0; right: 0; bottom: 6px; height: 3px; background: var(--color-accent); transform: scaleX(0); transform-origin: left; transition: transform var(--dur-short) var(--ease-out); }
+    .hdr__nav a:hover::after { transform: scaleX(1); }
+    .hdr__nav :global(.future-link) { color: var(--color-muted); text-decoration: underline dashed 1px; text-underline-offset: 0.3em; }
+
+  }
+  @media (min-width: 1200px) and (max-width: 1399px) {
+    .hdr__nav a, .hdr__nav :global(.future-link) { font-size: 0.875rem; }
+    .hdr__nav ul { gap: 0.75rem; }
+  }
+  @media (min-width: 1400px) {
+    .city { display: block; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .city__btn svg, .hdr__nav a::after { transition: none; }
+  }
+</style>
